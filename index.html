@@ -1,35 +1,72 @@
 <!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+</head>
 <html>
-  <body></body>
+  <body>
+    <h1>Convert App</h1>
+    <div id="container"></div>
+  </body>
   <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-    const App = () => {
-      const [minutes, setMinutes] = React.useState();
-      const onChange = (event) => {
-        const v = event.target.value;
-        setMinutes(v);
-        console.log(v);
+    const TimeChanger = () => {
+      const [time, setTime] = React.useState(0);
+      const [swip, setSwip] = React.useState(true);
+      const changeTime = (event) => {
+        setTime(event.target.value);
       };
+      const flip = () => {
+        reset();
+        setSwip((current) => !current);
+      };
+      const reset = () => setTime(0);
       return (
-        <div>
-          <h1>Super Converter</h1>
-          <label htmlFor="minutes">Minutes</label>
+        <>
+          <label htmlFor="hours">시</label>
+          <input
+            type="number"
+            id="hours"
+            value={swip ? time : time / 60}
+            onChange={changeTime}
+            disabled={!swip}
+          />
+          <br />
+          <label htmlFor="minutes">분</label>
           <input
             type="number"
             id="minutes"
-            value={minutes}
-            onChange={onChange}
-          ></input>
-          <h4>You want convert {minutes}</h4>
+            value={swip ? time * 60 : time}
+            onChange={changeTime}
+            disabled={swip}
+          />
           <br />
-          <label htmlFor="hours">Hours</label>
-          <input type="number" id="hours"></input>
-        </div>
+          <button onClick={reset}>초기화</button>
+          <button onClick={flip}>시분변경</button>
+        </>
       );
     };
-    const body = document.querySelector("body");
-    ReactDOM.render(<App />, body);
+    const App = () => {
+      const [optionValue, setOptionValue] = React.useState();
+      const changeValue = (event) => {
+        console.log(event.target.value);
+        setOptionValue(event.target.value);
+      };
+      return (
+        <>
+          <select value={optionValue} onChange={changeValue}>
+            <option value="0">선택</option>
+            <option value="1">시간변환</option>
+            <option value="2">몸무게변환</option>
+          </select>
+          <br />
+          {optionValue === "0" ? <></> : null}
+          {optionValue === "1" ? <TimeChanger /> : null}
+        </>
+      );
+    };
+    const container = document.getElementById("container");
+    ReactDOM.render(<App />, container);
   </script>
 </html>
