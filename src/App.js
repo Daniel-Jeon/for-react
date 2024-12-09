@@ -1,29 +1,36 @@
 import { useState } from "react";
 
 function App() {
-  const [toDo, setTodo] = useState("");
-  const [toDos, setTodos] = useState([]);
-  const onChange = (event) => setTodo(event.target.value);
-  const onSubmit = (event) => {
+  const [todo, setTodo] = useState("");
+  const [todos, addTodos] = useState([]);
+  const changeTodo = (event) => {
+    setTodo(event.target.value);
+  };
+  const saveTodos = (event) => {
     event.preventDefault();
-    if (toDo === "") return;
-    setTodos((current) => [toDo, ...current]);
+    if (todo === "") return;
+    addTodos((todosArray) => [todo, ...todosArray]);
     setTodo("");
   };
-  console.log("toDos:", toDos);
+  console.log("todos:", todos);
   return (
-    <div>
-      <h1>My To Dos {toDos.length}</h1>
-      <form onSubmit={onSubmit}>
+    <>
+      <h1>My To Dos ({todos.length})</h1>
+      <form onSubmit={saveTodos}>
         <input
-          value={toDo}
-          onChange={onChange}
+          value={todo}
+          onChange={changeTodo}
           type="text"
           placeholder="Write your to do..."
         />
         <button>Add To Do</button>
       </form>
-    </div>
+      <ul>
+        {todos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </>
   );
 }
 
