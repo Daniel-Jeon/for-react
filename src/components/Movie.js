@@ -26,5 +26,5 @@ Movie.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-console.log("2");
+console.log("3");
 export default Movie;
